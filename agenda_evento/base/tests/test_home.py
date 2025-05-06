@@ -6,4 +6,5 @@ def test_home_status(client: Client):
 
 def test_home_status(client: Client):
     response = client.get('/base')
-    assert response.content == b'Oi, cliente'    
+    assert response.content == b'Oi, cliente'
+     
