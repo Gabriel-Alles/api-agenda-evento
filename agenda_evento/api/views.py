@@ -1,8 +1,17 @@
-from rest_framework.viewsets import GenericViewSet
-
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from agenda_evento.models import Evento  # Seu modelo
+from agenda_evento.api.serializers import EventoSerializer  # Seu serializer
 
-class EventoViews(GenericViewSet):
+class EventoViews(ModelViewSet):
+    queryset = Evento.objects.all()
+    serializer_class = EventoSerializer
 
-    def creat(self, request):
-        return Response('Evento recebido, 200')
+    # O método create será sobrescrito para manter sua resposta personalizada
+    def create(self, request, *args, **kwargs):
+        # Aqui você pode manter a lógica de enviar a mensagem de sucesso
+        dados_response = {
+            'mensagem': 'Dados recebidos com sucesso',
+            'dados': request.data
+        }
+        return Response(dados_response, status=200)
