@@ -19,14 +19,14 @@ class EventoViews(ModelViewSet):
 
     def list(self, request):
         response_listagem_evento = [
-        {
-        "titulo": "Call de Alinhamento",
-        "data": "2025-02-20T13:30:00Z",
-        "horario_inicio": "14:00:00",
-        "horario_fim": "15:00:00",
-        "convidados": "gabriel.alles@hotmail.com",
-        "local": "https://meet.google.com/rbr-hhfr-mnt",
-        "descricao": "Call para teste"
-        }
-    ]
-        return Response(response_listagem_evento, 200 )
+            {
+                "titulo": "Call de Alinhamento",
+                "data": "2025-02-20T13:30:00Z",
+                "horario_inicio": "14:00:00",
+                "horario_fim": "15:00:00",
+                "convidados": "gabriel.alles@hotmail.com",
+                "local": "https://meet.google.com/rbr-hhfr-mnt",
+                "descricao": "Call para teste"
+            }
+        ]
+        return Response(response_listagem_evento, 200)
