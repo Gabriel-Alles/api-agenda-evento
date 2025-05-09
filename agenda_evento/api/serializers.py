@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from agenda_evento.models import Evento
 
+
 class EventoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evento

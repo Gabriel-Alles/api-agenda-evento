@@ -1,6 +1,7 @@
 from django.db import models
 import json
 
+
 class Evento(models.Model):
     titulo = models.CharField(max_length=200, default="Sem título")
     data = models.DateTimeField(null=True, blank=True)
