@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from agenda_evento.models import Evento  # Seu modelo
+from .models import Evento  # Seu modelo
 from agenda_evento.api.serializers import EventoSerializer  # Seu serializer
 
 
