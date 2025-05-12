@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'agenda_evento.wsgi.application'
 
 
 default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-parser_database = dj_database_url.parse(config('DATABASE_URL', default= default_db_url))
+parser_database = dj_database_url.parse(config('DATABASE_URL', default=default_db_url))
 
 
 DATABASES = {
