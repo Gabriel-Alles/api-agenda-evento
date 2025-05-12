@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,8 +78,9 @@ WSGI_APPLICATION = 'agenda_evento.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-parser_database = dj_database_url.parse('postgres://devcontratado:psdevcontratado@localhost:5439/postgres')
+parser_database = dj_database_url.parse(config('DATABASE_URL', default= default_db_url))
 
 
 DATABASES = {
