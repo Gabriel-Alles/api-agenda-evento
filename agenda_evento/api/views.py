@@ -2,22 +2,27 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from .models import Evento  # Seu modelo
 from agenda_evento.api.serializers import EventoSerializer  # Seu serializer
+from rest_framework import status
 
 
 class EventoViews(ModelViewSet):
     queryset = Evento.objects.all()
     serializer_class = EventoSerializer
 
-    # O método create será sobrescrito para manter sua resposta personalizada
+    # Método CREATE com retorno personalizado de ID e título
     def create(self, request, *args, **kwargs):
-        # Aqui você pode manter a lógica de enviar a mensagem de sucesso
-        dados_response = {
-            'mensagem': 'Dados recebidos com sucesso',
-            'dados': request.data
-        }
-        return Response(dados_response, status=200)
+        serializer = self.get_serializer(data=request.data)  # json > objeto
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-    def list(self, request):
+        dados_response = {
+            "evento_id": serializer.data["id"],
+            "mensagem": f'Evento {serializer.data["titulo"]} criado com sucesso.'
+        }
+        return Response(dados_response, status.HTTP_201_CREATED)
+
+    # Método LIST corrigido para retornar os dados serializados em JSON
+    def list(self, request, *args, **kwargs):
         queryset = Evento.objects.all()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=200)
+        serializer = self.get_serializer(queryset, many=True)  # objeto > json
+        return Response(serializer.data, status.HTTP_200_OK)
