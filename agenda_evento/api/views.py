@@ -19,8 +19,5 @@ class EventoViews(ModelViewSet):
 
     def list(self, request):
         queryset = Evento.objects.all()
-
-        for evento in queryset:
-            print(evento)
-
-        return Response(queryset, 200)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=200)
