@@ -1,6 +1,7 @@
 import pytest
 from agenda_evento.api.models import Evento
 
+
 @pytest.mark.django_db
 def test_deve_criar_evento_na_base(evento_factory):
     assert evento_factory.titulo == 'Teste teste'

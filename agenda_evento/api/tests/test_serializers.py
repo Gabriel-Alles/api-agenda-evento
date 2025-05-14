@@ -6,7 +6,6 @@ from agenda_evento.api.serializers import EventoSerializer
 pytestmark = pytest.mark.django_db
 
 
-
 def test_deve_serializar_evento(evento_factory):
     serializer = EventoSerializer(evento_factory)
 

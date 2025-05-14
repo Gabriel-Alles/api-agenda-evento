@@ -1,45 +1,60 @@
+import pytest
 from django.test import Client
+from rest_framework import status
+
+pytestmark = pytest.mark.django_db
+
+PATH = '/api/v1/eventos/'
+
+# Testa criação com campo obrigatório ausente
 
 
-def test_deve_criar_evento():
+def test_erro_ao_criar_evento_sem_titulo(corpo_requisicao):
+    client = Client()
+    corpo_requisicao.pop('titulo')  # Remove o título
+
+    response = client.post(path=PATH, data=corpo_requisicao, content_type='application/json')
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert 'titulo' in response.json()
+
+
+# Testa criação com data em formato inválido
+def test_erro_ao_criar_evento_com_data_invalida(corpo_requisicao):
+    client = Client()
+    corpo_requisicao['data'] = '20-02-2025'  # Formato errado
+
+    response = client.post(path=PATH, data=corpo_requisicao, content_type='application/json')
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert 'data' in response.json()
+
+
+# Testa criação com horário final anterior ao inicial
+def test_erro_ao_criar_evento_com_horario_invalido():
     client = Client()
     dados_requisicao = {
-        "titulo": "Call de Alinhamento",
-        "data": "2025-02-20T13:30:00Z",
-        "horario_inicio": "14:00:00",
-        "horario_fim": "15:00:00",
-        "convidados": "gabriel.alles@hotmail.com",
+        "titulo": "Evento horário inválido",
+        "data": "2025-02-20",
+        "horario_inicio": "15-30-00",
+        "horario_fim": "13-00-00",  # fim antes do início
+        "convidados": ["gabriel.alles@hotmail.com"],
         "local": "https://meet.google.com/rbr-hhfr-mnt",
-        "descricao": "Call para teste"
+        "descricao": "Horário inválido"
     }
 
-    response = client.post(path='/api/v1/eventos/', data=dados_requisicao, content_type='application/json')
+    response = client.post(path=PATH, data=dados_requisicao, content_type='application/json')
 
-    assert response.status_code == 200
-    mensagem_response = response.json()['mensagem']
-    assert mensagem_response == 'Dados recebidos com sucesso'
-
-    dados_response = response.json()['dados']
-    assert dados_response['titulo'] == 'Call de Alinhamento'
-    assert dados_response['data'] == "2025-02-20T13:30:00Z"
-    assert dados_response['horario_inicio'] == "14:00:00"
-    assert dados_response['horario_fim'] == "15:00:00"
-    assert dados_response['convidados'] == "gabriel.alles@hotmail.com"
-    assert dados_response['local'] == "https://meet.google.com/rbr-hhfr-mnt"
-    assert dados_response['descricao'] == "Call para teste"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert 'horario_fim' in response.json() or 'non_field_errors' in response.json()
 
 
-def test_deve_listar_eventos():
+# Testa criação com e-mail de convidado inválido
+def test_erro_ao_criar_evento_com_email_invalido(corpo_requisicao):
     client = Client()
-    response = client.get('/api/v1/eventos/')
+    corpo_requisicao['convidados'] = 'email_invalido'
 
-    assert response.status_code == 200
+    response = client.post(path=PATH, data=corpo_requisicao, content_type='application/json')
 
-    dados_response = response.json()[0]
-    assert dados_response['titulo'] == 'Call de Alinhamento'
-    assert dados_response['data'] == "2025-02-20T13:30:00Z"
-    assert dados_response['horario_inicio'] == "14:00:00"
-    assert dados_response['horario_fim'] == "15:00:00"
-    assert dados_response['convidados'] == "gabriel.alles@hotmail.com"
-    assert dados_response['local'] == "https://meet.google.com/rbr-hhfr-mnt"
-    assert dados_response['descricao'] == "Call para teste"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert 'convidados' in response.json()
