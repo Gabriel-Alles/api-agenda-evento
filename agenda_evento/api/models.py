@@ -10,4 +10,4 @@ class Evento(models.Model):
     horario_fim = models.TimeField('HORARIO_FIM', null=False)
     convidados = ArrayField(CharField('CONVIDADO', max_length=50), blank=False)
     local = models.CharField('LOCAL', max_length=200, null=False)
-    descricao = models.CharField('DESCRICAO', max_length=200)
+    descricao = models.CharField('DESCRICAO', max_length=200, blank=True, null=True)
