@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from .models import Evento  # Seu modelo
 from agenda_evento.api.serializers import EventoSerializer  # Seu serializer
 from rest_framework import status
-
+from rest_framework.generics import get_object_or_404
 
 class EventoViews(ModelViewSet):
     queryset = Evento.objects.all()
@@ -26,3 +26,8 @@ class EventoViews(ModelViewSet):
         queryset = Evento.objects.all()
         serializer = self.get_serializer(queryset, many=True)  # objeto > json
         return Response(serializer.data, status.HTTP_200_OK)
+
+    def retrieve(self, request, pk):
+        evento = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.get_serializer(evento)  
+        return Response(serializer.data)
