@@ -1,8 +1,22 @@
 from rest_framework import serializers
-from agenda_evento.models import Evento
+from .models import Evento
 
 
 class EventoSerializer(serializers.ModelSerializer):
+    convidados = serializers.ListField(
+        child=serializers.EmailField(),
+        allow_empty=False
+    )
+
     class Meta:
         model = Evento
-        fields = '__all__'  # Ou você pode listar os campos manualmente, se preferir
+        fields = [
+            'id',
+            'titulo',
+            'data',
+            'horario_inicio',
+            'horario_fim',
+            'convidados',  # Aqui colocado depois do horario_fim
+            'local',
+            'descricao',
+        ]

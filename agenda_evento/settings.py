@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2xiu+fv3lpe7zq!@p570@!ogu$m-i-o22#%ix610_nlz6^qn$8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'agenda_evento',
+    'agenda_evento.api',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -80,7 +82,7 @@ WSGI_APPLICATION = 'agenda_evento.wsgi.application'
 
 
 default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-parser_database = dj_database_url.parse(config('DATABASE_URL', default= default_db_url))
+parser_database = dj_database_url.parse(config('DATABASE_URL', default=default_db_url))
 
 
 DATABASES = {
