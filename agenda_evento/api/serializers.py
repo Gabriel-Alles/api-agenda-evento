@@ -1,14 +1,21 @@
 from rest_framework import serializers
 from .models import Evento
 
-
 class EventoSerializer(serializers.ModelSerializer):
-    # Validação de cada item da lista como um email válido
     convidados = serializers.ListField(
-        child=serializers.EmailField(),  # Isso garante a validação correta de cada e-mail
+        child=serializers.EmailField(),
         allow_empty=False
     )
 
     class Meta:
         model = Evento
-        fields = '__all__'
+        fields = [
+            'id',
+            'titulo',
+            'data',
+            'horario_inicio',
+            'horario_fim',
+            'convidados',  # Aqui colocado depois do horario_fim
+            'local',
+            'descricao',
+        ]
