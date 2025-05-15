@@ -15,7 +15,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:11.5
+        image: postgres:14  
         ports:
           - 5432:5432
         options: >-
@@ -43,7 +43,13 @@ jobs:
             echo "Aguardando PostgreSQL iniciar..."
             sleep 1
           done
-          
+
+      - name: Create test database  
+        run: |
+          psql -h localhost -U postgres -c "CREATE DATABASE tesdata_base"
+        env:
+          PGPASSWORD: postgres
+
       - name: Lint with flake8
         run: flake8
         
@@ -55,4 +61,3 @@ jobs:
           DB_HOST: localhost
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/tesdata_base
         run: pytest
-        
