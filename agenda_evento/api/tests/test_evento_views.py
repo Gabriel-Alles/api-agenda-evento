@@ -88,3 +88,39 @@ def test_nao_deve_listar_evento_nao_encontrado(client: Client):
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert 'detail' in response.json()
     assert 'No Evento matches the given query.' in response.json()['detail']
+
+
+
+def test_deve_editar_evento(client: Client, corpo_requisicao):
+    response_post = client.post(PATH, data=corpo_requisicao, content_type='application/json')
+    print("RESPONSE POST JSON:", response_post.json())
+
+    assert response_post.status_code == status.HTTP_201_CREATED
+
+    # Use 'evento_id' ou 'id' conforme sua API retornar
+    evento_json = response_post.json()
+    evento_id = evento_json.get('id') or evento_json.get('evento_id')
+    assert evento_id is not None
+
+    dados_requisicao_put = {
+        "titulo": "Evento de Testes - Editado",
+        "data": "2025-02-20",
+        "horario_inicio": "13:30:00",
+        "horario_fim": "14:00:00",
+        "convidados": ["gabriel.alles@hotmail.com"],
+        "local": "https://meet.google.com/rbr-hhfr-mnt",
+        "descricao": "Teste de funcionamento 2"
+    }
+
+    response = client.put(f'{PATH}{evento_id}/', data=dados_requisicao_put, content_type='application/json')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    response_data = response.json()
+    assert response_data['titulo'] == 'Evento de Testes - Editado'
+    assert response_data['data'] == '2025-02-20'
+    assert response_data['horario_inicio'] == '13:30:00'
+    assert response_data['horario_fim'] == '14:00:00'
+    assert response_data['convidados'] == ["gabriel.alles@hotmail.com"]
+    assert response_data['local'] == 'https://meet.google.com/rbr-hhfr-mnt'
+    assert response_data['descricao'] == 'Teste de funcionamento 2'
