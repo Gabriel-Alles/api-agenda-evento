@@ -48,11 +48,7 @@ jobs:
             sleep 1
           done
 
-      - name: Create test database  
-        run: |
-          psql -h localhost -U postgres -c "CREATE DATABASE tesdata_base"
-        env:
-          PGPASSWORD: postgres
+      # ❌ Etapa de criação do banco removida — o banco já é criado automaticamente pelo serviço postgres
 
       - name: Lint with flake8
         run: flake8
