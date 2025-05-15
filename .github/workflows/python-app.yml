@@ -36,12 +36,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Aguardando PostgreSQL iniciar..."
+            sleep 1
+          done
           
       - name: Lint with flake8
         run: flake8
         
       - name: Test with pytest
         env:
+          POSTGRES_DB: tesdata_base
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          DATABASE_URL: "postgres://postgres@localhost:5432/tesdata_base"
+          DB_HOST: localhost
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tesdata_base
         run: pytest
+        
