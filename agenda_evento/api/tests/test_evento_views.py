@@ -36,7 +36,7 @@ def test_erro_ao_criar_evento_com_horario_invalido():
         "titulo": "Evento horário inválido",
         "data": "2025-02-20",
         "horario_inicio": "15-30-00",
-        "horario_fim": "16-00-00",  
+        "horario_fim": "16-00-00",
         "convidados": ["gabriel.alles@hotmail.com"],
         "local": "https://meet.google.com/rbr-hhfr-mnt",
         "descricao": "Horário inválido"
@@ -88,7 +88,6 @@ def test_nao_deve_listar_evento_nao_encontrado(client: Client):
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert 'detail' in response.json()
     assert 'No Evento matches the given query.' in response.json()['detail']
-
 
 
 def test_deve_editar_evento(client: Client, corpo_requisicao):

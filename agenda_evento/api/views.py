@@ -5,6 +5,7 @@ from agenda_evento.api.serializers import EventoSerializer  # Seu serializer
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 
+
 class EventoViews(ModelViewSet):
     queryset = Evento.objects.all()
     serializer_class = EventoSerializer
@@ -29,16 +30,16 @@ class EventoViews(ModelViewSet):
 
     def retrieve(self, request, pk):
         evento = get_object_or_404(self.queryset, pk=pk)
-        serializer = self.get_serializer(evento)  
+        serializer = self.get_serializer(evento)
         return Response(serializer.data)
-    
+
     def update(self, request, pk):
         evento = get_object_or_404(self.queryset, pk=pk)
         serializer = self.get_serializer(evento, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-    
+
     def destroy(self, request, pk):
         evento = get_object_or_404(self.queryset, pk=pk)
         evento.delete()
